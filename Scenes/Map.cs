@@ -35,7 +35,7 @@ namespace Kokoban
 		{
 			base.Draw ();
 			Console.SetCursorPosition (0, InternalMap.GetLength (0) + 2);
-			Console.WriteLine("  Pulse R para reiniciar el mapa y BORRAR para volver atrás");
+			Global.Center("Pulse R para reiniciar el mapa y BORRAR para volver atrás");
 		}
 		public override Boolean In(ConsoleKeyInfo Key) {
 			switch (Key.Key) {
@@ -58,8 +58,8 @@ namespace Kokoban
 			case ConsoleKey.R:
 				LoadMap ();
 				break;
-			case ConsoleKey.Backspace:
-				return false;
+			default:
+				return base.In (Key);
 			}
 			return true;
 		}

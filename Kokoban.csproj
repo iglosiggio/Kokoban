@@ -43,10 +43,15 @@
     <Compile Include="Scenes\MainMenu.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Scenes\MapSelector.cs" />
+    <Compile Include="GameProto\ProtoState\MapState.cs" />
+    <Compile Include="GameProto\ProtoState\MenuState.cs" />
+    <Compile Include="Scenes\Ugly\MapList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="GameProto\" />
     <Folder Include="Scenes\" />
+    <Folder Include="GameProto\ProtoState\" />
+    <Folder Include="Scenes\Ugly\" />
   </ItemGroup>
 </Project>

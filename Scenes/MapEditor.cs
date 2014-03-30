@@ -18,7 +18,10 @@ namespace Kokoban
 			InternalMap = new TileState[Height, Width];
 			for (int y = 0; y < InternalMap.GetLength (0); y++)
 				for (int x = 0; x < InternalMap.GetLength (1); x++)
-					InternalMap [y, x] = TileState.vacio;
+					if (x == 0 || y == 0 || x == InternalMap.GetLength (1) - 1 || y == InternalMap.GetLength (0) - 1)
+						InternalMap [y, x] = TileState.fijo;
+					else
+						InternalMap [y, x] = TileState.vacio;
 			Player.LastMove = PlayerSprite.arriba;
 			Player.X = 1;
 			Player.Y = 1;
@@ -26,7 +29,7 @@ namespace Kokoban
 		public override void Draw ()
 		{
 			base.Draw ();
-			Console.SetCursorPosition (Pointer.X, Pointer.Y);
+			Console.SetCursorPosition (Pointer.X + (Console.WindowWidth - InternalMap.GetLength(0)) / 2, Pointer.Y);
 			ConsoleColor Back = Console.BackgroundColor;
 			Console.BackgroundColor = Console.ForegroundColor;
 			Console.ForegroundColor = Back;
@@ -36,12 +39,12 @@ namespace Kokoban
 				Console.Write((char)InternalMap [Pointer.Y, Pointer.X]);
 			Console.ResetColor ();
 			Console.SetCursorPosition (0, InternalMap.GetLength (0) + 2);
-			Console.WriteLine ("  Flechas -> Mover cursor     P -> Jugador");
-			Console.WriteLine ("  F       -> Pared            O -> Objetivo");
-			Console.WriteLine ("  m       -> Caja             M -> Caja Ubicada");
-			Console.WriteLine ("  SUPR    -> Espacio vacío    R -> Reiniciar mapa");
-			Console.WriteLine ("  BORRAR  -> Volver atrás     INICIO -> Probar nivel");
-			Console.WriteLine ("    PULSE S PARA GUARDAR EL MAPA EN EL ESPACIO {0}", Global.Maps.Count);
+			Global.Center ("Flechas -> Mover cursor     P -> Jugador          ");
+			Global.Center ("F       -> Pared            O -> Objetivo         ");
+			Global.Center ("m       -> Caja             M -> Caja Ubicada     ");
+			Global.Center ("SUPR    -> Espacio vacío    R -> Reiniciar mapa   ");
+			Global.Center ("BORRAR  -> Volver atrás     INICIO -> Probar nivel");
+			Global.Center ("PULSE S PARA GUARDAR EL MAPA EN EL ESPACIO {0}", Global.Maps.Count);
 		}
 		public override Boolean In(ConsoleKeyInfo Key) {
 			switch (Key.Key) {
@@ -86,23 +89,26 @@ namespace Kokoban
 				TileState[,] MapClone = (TileState[,])InternalMap.Clone ();
 				Map Game = new Map (MapClone, Player.X, Player.Y);
 				Game.Loop ();
-				Console.ReadKey ();
 				Console.Clear();
 				break;
-			case ConsoleKey.Backspace:
-				return false;
 			case ConsoleKey.R:
 				for (int y = 0; y < InternalMap.GetLength (0); y++)
 					for (int x = 0; x < InternalMap.GetLength (1); x++)
-						InternalMap [y, x] = TileState.vacio;
+						if (x == 0 || y == 0 || x == InternalMap.GetLength (1) - 1 || y == InternalMap.GetLength (0) - 1)
+							InternalMap [y, x] = TileState.fijo;
+						else
+							InternalMap [y, x] = TileState.vacio;
 				break;
 			case ConsoleKey.S:
 				Global.Maps.Add(new MapStruct((TileState[,])InternalMap.Clone(), Player.X, Player.Y));
 				break;
+			default:
+				return base.In (Key);
 			}
 			return true;
 		}
 		public override void Loop() {
+			Console.Clear ();
 			do {
 				Draw();
 			} while(In(Console.ReadKey(true)));

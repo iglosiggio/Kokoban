@@ -33,6 +33,11 @@ namespace Kokoban
 				return default(T);
 			}
 		}
+		public static void Center(string fmt, params object[] args) {
+			String formateado = String.Format (fmt, args);
+			Console.Write (new String (' ', (Console.WindowWidth - formateado.Length) / 2));
+			Console.WriteLine ("{0}", formateado);
+		}
 	}
 }
 
